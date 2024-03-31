@@ -11,7 +11,14 @@ export interface RegisterUserRequest extends Request {
     body: UserData;
 }
 
-export interface TokenPayload {
-    sub: string;
-    role: string;
+export interface AuthRequest extends Request {
+    auth: {
+        sub: string;
+        role: string;
+    };
 }
+
+// export interface TokenPayload {
+//     sub: string;
+//     role: string;
+// }
