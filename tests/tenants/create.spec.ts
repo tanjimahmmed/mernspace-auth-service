@@ -3,6 +3,7 @@ import request from "supertest";
 import { AppDataSource } from "../../src/config/data-source";
 import app from "../../src/app";
 import { Tenant } from "../../src/entity/Tenant";
+
 import createJWKSMock from "mock-jwks";
 import { Roles } from "../../src/constants";
 
@@ -54,10 +55,13 @@ describe("POST /tenants", () => {
                 name: "Tenant name",
                 address: "Tenant address",
             };
+
             await request(app)
                 .post("/tenants")
                 .set("Cookie", [`accessToken=${adminToken}`])
                 .send(tenantData);
+
+            await request(app).post("/tenants").send(tenantData);
 
             const tenantRepository = connection.getRepository(Tenant);
             const tenants = await tenantRepository.find();
