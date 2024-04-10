@@ -1,4 +1,4 @@
-import express from "express";
+import express, { RequestHandler } from "express";
 import { TenantController } from "../controllers/TenantController";
 import { TenantService } from "../services/TenantService";
 import { AppDataSource } from "../config/data-source";
@@ -15,25 +15,46 @@ const tenantRepository = AppDataSource.getRepository(Tenant);
 const tenantService = new TenantService(tenantRepository);
 const tenantController = new TenantController(tenantService, logger);
 
-router.post("/", authenticate, canAccess([Roles.ADMIN]), (req, res, next) =>
-    tenantController.create(req, res, next),
+router.post(
+    "/",
+    authenticate as RequestHandler,
+    canAccess([Roles.ADMIN]),
+    (req, res, next) =>
+        tenantController.create(req, res, next) as unknown as RequestHandler,
 );
 
-router.post("/:id", authenticate, canAccess([Roles.ADMIN]), (req, res, next) =>
-    tenantController.update(req, res, next),
+router.post(
+    "/:id",
+    authenticate as RequestHandler,
+    canAccess([Roles.ADMIN]),
+    (req, res, next) =>
+        tenantController.update(req, res, next) as unknown as RequestHandler,
 );
 
-router.get("/", (req, res, next) => tenantController.getAll(req, res, next));
-router.get("/:id", authenticate, canAccess([Roles.ADMIN]), (req, res, next) =>
-    tenantController.getOne(req, res, next),
+router.get(
+    "/",
+    (req, res, next) =>
+        tenantController.getAll(req, res, next) as unknown as RequestHandler,
+);
+router.get(
+    "/:id",
+    authenticate as RequestHandler,
+    canAccess([Roles.ADMIN]),
+    (req, res, next) =>
+        tenantController.getOne(req, res, next) as unknown as RequestHandler,
 );
 router.delete(
     "/:id",
-    authenticate,
+    authenticate as RequestHandler,
     canAccess([Roles.ADMIN]),
-    (req, res, next) => tenantController.destroy(req, res, next),
+    (req, res, next) =>
+        tenantController.destroy(req, res, next) as unknown as RequestHandler,
 );
 
-router.post("/", (req, res, next) => tenantController.create(req, res, next));
+router.post(
+    "/",
+    (req, res, next) =>
+        tenantController.create(req, res, next) as unknown as RequestHandler,
+);
 
 export default router;
